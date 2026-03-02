@@ -1,5 +1,8 @@
 class_name Dice3D extends RigidBody3D
 
+signal picked()
+signal released()
+
 @export var stopthres_lin: float = 0.1
 @export var stopthres_ang: float = 0.1
 @export var time_to_rolldone: float = 1
@@ -12,6 +15,9 @@ var dragging: bool = false
 var last_drag_pos: Vector3 = Vector3.ZERO
 var drag_local_pos: Vector3 = Vector3.ZERO
 var rolldone_timer: float = 0.0
+var dragging_dice: Array[Dice3D] = []
+var dragging_dice_rid: Array[RID] = []
+var dragging_dice_pos: Array[Vector3] = []
 
 signal rolldone(dice: Dice3D)
 signal rollreset(dice: Dice3D)
@@ -38,18 +44,56 @@ func _physics_process(delta: float) -> void:
 	if not dragging:
 		return
 	var hover_pos: Vector3 = last_drag_pos
-	hover_pos.y = 3
+	hover_pos.y = 5
 	apply_force(2*(hover_pos - position)/delta, transform * drag_local_pos - position)
 	linear_velocity *= pow(0.75, 60*delta);
 	angular_velocity *= pow(0.75, 60*delta);
 	
 
-func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int) -> void:
-	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		dragging = event.pressed
+func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, normal: Vector3, shape_idx: int, main: bool = true, nonmain_sample_pos: Vector3 = Vector3.ZERO) -> void:
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and event.pressed\
+			or not main and not dragging and event is InputEventMouse and event.button_mask & MOUSE_BUTTON_LEFT:
+		dragging = true
 		last_drag_pos = event_position
-		if event.pressed:
+		if main:
 			drag_local_pos = global_transform.inverse() * event_position
+		else:
+			drag_local_pos = global_transform.inverse() * nonmain_sample_pos
+		
+		dragging_dice.clear()
+		dragging_dice_rid.clear()
+		dragging_dice_pos.clear()
+		dragging_dice.append(self)
+		dragging_dice_rid.append(get_rid())
+		dragging_dice_pos.append(drag_local_pos)
+		
+		if main:
+			picked.emit()
+	
+	if main and dragging and event is InputEventMouse:
+		var orig: Vector3 = camera.project_ray_origin(event.position)
+		var dir: Vector3 = camera.project_ray_normal(event.position)
+		
+		for i in range(16):
+			var rayinfo: PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(orig, orig + 100*dir, 2, dragging_dice_rid)
+			var result: Dictionary = get_world_3d().direct_space_state.intersect_ray(rayinfo)
+			if len(result) == 0:
+				break
+			dragging_dice.append(result['collider'])
+			dragging_dice_rid.append(result['rid'])
+			dragging_dice_pos.append(result['position'])
+	
+	if main and len(dragging_dice) > 0:
+		for i in range(len(dragging_dice)-1):
+			dragging_dice[i+1]._input_event(camera, event, event_position, normal, 0, false, dragging_dice_pos[i+1])
+		
+	# release
+	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
+		dragging = false
+		dragging_dice.clear()
+		dragging_dice_rid.clear()
+		dragging_dice_pos.clear()
+		released.emit()
 
 	if event is InputEventMouseMotion:
 		last_drag_pos = event_position
@@ -57,4 +101,8 @@ func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_MOUSE_EXIT and dragging:
 		dragging = false
+		dragging_dice.clear()
+		dragging_dice_rid.clear()
+		dragging_dice_pos.clear()
+		released.emit()
 	
