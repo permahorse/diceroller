@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://br2xjons1vet" path="res://d20.tscn" id="1_jd0nb"]
 [ext_resource type="Material" uid="uid://bu5lkt54yfi66" path="res://tex/wood062/Wood062_1K-PNG.tres" id="2_v5i0k"]
+[ext_resource type="Script" uid="uid://ceyhfqr8ix08x" path="res://controller.gd" id="3_kl0hw"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jd0nb"]
 friction = 0.5
@@ -55,7 +56,6 @@ sky = SubResource("Sky_v5i0k")
 [node name="Node3D" type="Node3D" unique_id=1471549783]
 
 [node name="dice" parent="." unique_id=869552298 instance=ExtResource("1_jd0nb")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4963028, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2019588396 node_paths=PackedStringArray("camera")]
 physics_material_override = SubResource("PhysicsMaterial_jd0nb")
@@ -95,4 +95,30 @@ transform = Transform3D(1, 0, 0, 0, -0.69517285, 0.71884257, 0, -0.71884257, -0.
 shadow_enabled = true
 shadow_opacity = 0.8
 
-[node name="manipilator" type="Node3D" parent="." unique_id=169740469]
+[node name="controller" type="Node3D" parent="." unique_id=169740469]
+script = ExtResource("3_kl0hw")
+d20 = ExtResource("1_jd0nb")
+
+[node name="Control" type="Control" parent="." unique_id=955441391]
+layout_mode = 3
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -576.0
+offset_right = -536.0
+offset_bottom = 40.0
+grow_horizontal = 2
+
+[node name="Button" type="Button" parent="Control" unique_id=1443495781]
+layout_mode = 1
+anchors_preset = -1
+offset_left = 459.0
+offset_top = 563.0
+offset_right = 510.0
+offset_bottom = 612.0
+text = "d20
+"
+
+[connection signal="picked" from="dice" to="controller" method="_die_picked"]
+[connection signal="released" from="dice" to="controller" method="_die_released"]
+[connection signal="pressed" from="Control/Button" to="controller" method="_add_die" binds= [0]]
