@@ -2,9 +2,9 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bb6whavf8k8y2"
-path.s3tc="res://.godot/imported/Wood062_1K-PNG_Color.png-adeb711b65a028f2472968f942eb7c9a.s3tc.ctex"
-path.etc2="res://.godot/imported/Wood062_1K-PNG_Color.png-adeb711b65a028f2472968f942eb7c9a.etc2.ctex"
+uid="uid://dg7kajqekge70"
+path.s3tc="res://.godot/imported/Wood062_1K-PNG_AmbientOcclusion.jpg-58e7e86a950b00885f13d916f626b44c.s3tc.ctex"
+path.etc2="res://.godot/imported/Wood062_1K-PNG_AmbientOcclusion.jpg-58e7e86a950b00885f13d916f626b44c.etc2.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc", "etc2_astc"],
 "vram_texture": true
@@ -12,8 +12,8 @@ metadata={
 
 [deps]
 
-source_file="res://tex/wood062/Wood062_1K-PNG_Color.png"
-dest_files=["res://.godot/imported/Wood062_1K-PNG_Color.png-adeb711b65a028f2472968f942eb7c9a.s3tc.ctex", "res://.godot/imported/Wood062_1K-PNG_Color.png-adeb711b65a028f2472968f942eb7c9a.etc2.ctex"]
+source_file="res://tex/wood062/Wood062_1K-PNG_AmbientOcclusion.jpg"
+dest_files=["res://.godot/imported/Wood062_1K-PNG_AmbientOcclusion.jpg-58e7e86a950b00885f13d916f626b44c.s3tc.ctex", "res://.godot/imported/Wood062_1K-PNG_AmbientOcclusion.jpg-58e7e86a950b00885f13d916f626b44c.etc2.ctex"]
 
 [params]
 

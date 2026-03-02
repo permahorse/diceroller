@@ -1,22 +1,22 @@
 [gd_resource type="StandardMaterial3D" format=3 uid="uid://bu5lkt54yfi66"]
 
-[ext_resource type="Texture2D" uid="uid://ds547ip38yjei" path="res://tex/wood062/Wood062_1K-PNG_AmbientOcclusion.png" id="AmbientOcclusion"]
-[ext_resource type="Texture2D" uid="uid://bb6whavf8k8y2" path="res://tex/wood062/Wood062_1K-PNG_Color.png" id="Color"]
-[ext_resource type="Texture2D" uid="uid://35y00m7a4uq8" path="res://tex/wood062/Wood062_1K-PNG_Displacement.png" id="Displacement"]
-[ext_resource type="Texture2D" uid="uid://1hjh6ms4iutw" path="res://tex/wood062/Wood062_1K-PNG_NormalGL.png" id="NormalGL"]
-[ext_resource type="Texture2D" uid="uid://do7y0txbabv8n" path="res://tex/wood062/Wood062_1K-PNG_Roughness.png" id="Roughness"]
+[ext_resource type="Texture2D" uid="uid://uymte3hc23p6" path="res://tex/wood062/Wood062_1K-PNG_Color.jpg" id="1_aheiv"]
+[ext_resource type="Texture2D" uid="uid://dg7kajqekge70" path="res://tex/wood062/Wood062_1K-PNG_AmbientOcclusion.jpg" id="2_aheiv"]
+[ext_resource type="Texture2D" uid="uid://bld52px8ypqln" path="res://tex/wood062/Wood062_1K-PNG_Displacement.jpg" id="3_vtji6"]
+[ext_resource type="Texture2D" uid="uid://c1av6lk0uuh05" path="res://tex/wood062/Wood062_1K-PNG_NormalGL.jpg" id="4_aheiv"]
+[ext_resource type="Texture2D" uid="uid://du4235xe1y1vc" path="res://tex/wood062/Wood062_1K-PNG_Roughness.jpg" id="5_vtji6"]
 
 [resource]
 albedo_color = Color(0.5802277, 0.58022773, 0.58022773, 1)
-albedo_texture = ExtResource("Color")
-roughness_texture = ExtResource("Roughness")
+albedo_texture = ExtResource("1_aheiv")
+roughness_texture = ExtResource("5_vtji6")
 roughness_texture_channel = 4
 normal_enabled = true
-normal_texture = ExtResource("NormalGL")
+normal_texture = ExtResource("4_aheiv")
 ao_enabled = true
-ao_texture = ExtResource("AmbientOcclusion")
+ao_texture = ExtResource("2_aheiv")
 ao_texture_channel = 4
 heightmap_enabled = true
 heightmap_scale = 1.0
-heightmap_texture = ExtResource("Displacement")
+heightmap_texture = ExtResource("3_vtji6")
 uv1_scale = Vector3(2, 2, 2)
