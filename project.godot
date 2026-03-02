@@ -13,7 +13,9 @@ config_version=5
 config/name="diceroller"
 run/main_scene="uid://dm1bfopm3aurt"
 config/features=PackedStringArray("4.6", "GL Compatibility")
-config/icon="res://icon.svg"
+boot_splash/bg_color=Color(0.067982785, 0.067982726, 0.067982696, 1)
+boot_splash/image="uid://1schn0xairbt"
+config/icon="uid://beqe0mqvgfl86"
 
 [filesystem]
 
