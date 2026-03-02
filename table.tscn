@@ -1,12 +1,47 @@
 [gd_scene format=3 uid="uid://dm1bfopm3aurt"]
 
 [ext_resource type="PackedScene" uid="uid://br2xjons1vet" path="res://d20.tscn" id="1_jd0nb"]
+[ext_resource type="Material" uid="uid://bu5lkt54yfi66" path="res://tex/wood062/Wood062_1K-PNG.tres" id="2_v5i0k"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jd0nb"]
 friction = 0.5
 bounce = 0.25
 
+[sub_resource type="GDScript" id="GDScript_jd0nb"]
+script/source = "extends StaticBody3D
+
+@export var camera: Camera3D
+
+# Called when the node enters the scene tree for the first time.
+func _ready() -> void:
+	var viewport: Viewport = get_viewport()
+	viewport.size_changed.connect(_viewport_resized)
+	
+	_viewport_resized()
+	
+	
+func _viewport_resized():
+	var viewport: Viewport = get_viewport()
+	var visrect: Rect2 = viewport.get_visible_rect()
+	var norm_upleft: Vector3 = camera.project_ray_normal(visrect.position)
+	var norm_downright: Vector3 = camera.project_ray_normal(visrect.end)
+	var norm_downleft: Vector3 = camera.project_ray_normal(visrect.position + visrect.size * Vector2(0, 1))
+	
+	var topleft2d: Vector3 = norm_upleft * Vector3(1,0,1) * (camera.position.y / norm_upleft.dot(Vector3.DOWN))
+	var downright2d: Vector3 = norm_downright * Vector3(1,0,1) * (camera.position.y / norm_downright.dot(Vector3.DOWN))
+	var downleft2d: Vector3 = norm_downleft * Vector3(1,0,1) * (camera.position.y / norm_downleft.dot(Vector3.DOWN))
+	
+	$wallL.position.x = downleft2d.x
+	$wallR.position.x = downright2d.x
+	$wallU.position.y = topleft2d.y
+	$wallD.position.y = downright2d.y
+"
+
 [sub_resource type="WorldBoundaryShape3D" id="WorldBoundaryShape3D_jd0nb"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jd0nb"]
+material = ExtResource("2_v5i0k")
+size = Vector2(50, 50)
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_jd0nb"]
 
@@ -22,34 +57,42 @@ sky = SubResource("Sky_v5i0k")
 [node name="dice" parent="." unique_id=869552298 instance=ExtResource("1_jd0nb")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.4963028, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2019588396]
+[node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2019588396 node_paths=PackedStringArray("camera")]
 physics_material_override = SubResource("PhysicsMaterial_jd0nb")
+script = SubResource("GDScript_jd0nb")
+camera = NodePath("../Camera3D")
 
 [node name="floor" type="CollisionShape3D" parent="StaticBody3D" unique_id=1896284705]
 shape = SubResource("WorldBoundaryShape3D_jd0nb")
 
-[node name="wall1" type="CollisionShape3D" parent="StaticBody3D" unique_id=1982705285]
-transform = Transform3D(-4.3711385e-08, 0.99999994, 0, -0.99999994, -4.3711385e-08, 0, 0, 0, 1, -5.456048, 0, 0)
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/floor" unique_id=1044517740]
+mesh = SubResource("PlaneMesh_jd0nb")
+
+[node name="wallL" type="CollisionShape3D" parent="StaticBody3D" unique_id=1982705285]
+transform = Transform3D(-4.3711385e-08, 0.99999994, 0, -0.99999994, -4.3711385e-08, 0, 0, 0, 1, -19.822163, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_jd0nb")
 
-[node name="wall2" type="CollisionShape3D" parent="StaticBody3D" unique_id=104394035]
-transform = Transform3D(-4.3711385e-08, -0.99999994, 0, 0.99999994, -4.3711385e-08, 0, 0, 0, 1, 5.456, 0, 0)
+[node name="wallR" type="CollisionShape3D" parent="StaticBody3D" unique_id=104394035]
+transform = Transform3D(-4.3711385e-08, -0.99999994, 0, 0.99999994, -4.3711385e-08, 0, 0, 0, 1, 21.910229, 0, 0)
 shape = SubResource("WorldBoundaryShape3D_jd0nb")
 
-[node name="wall3" type="CollisionShape3D" parent="StaticBody3D" unique_id=316494173]
+[node name="wallU" type="CollisionShape3D" parent="StaticBody3D" unique_id=316494173]
 transform = Transform3D(1.9106853e-15, 4.3711385e-08, 0.99999994, 0.9999999, -4.3711385e-08, 0, 4.3711385e-08, 0.99999994, -4.3711385e-08, 0, 0, -3.3460135)
 shape = SubResource("WorldBoundaryShape3D_jd0nb")
 
-[node name="wall4" type="CollisionShape3D" parent="StaticBody3D" unique_id=1385052766]
+[node name="wallD" type="CollisionShape3D" parent="StaticBody3D" unique_id=1385052766]
 transform = Transform3D(1.9106853e-15, -4.3711385e-08, 0.99999994, -0.9999999, -4.3711385e-08, 0, 4.3711385e-08, -0.99999994, -4.3711385e-08, 0, 0, 7.826695)
 shape = SubResource("WorldBoundaryShape3D_jd0nb")
 
 [node name="Camera3D" type="Camera3D" parent="." unique_id=582611575]
-transform = Transform3D(1, 0, 0, 0, 0.10145569, 0.9948401, 0, -0.9948401, 0.10145569, 0.13145578, 8.936716, 3.1111116)
+transform = Transform3D(1, 0, 0, 0, 0.10145569, 0.9948401, 0, -0.9948401, 0.10145569, 0.13145578, 14.727755, 4.9551835)
 environment = SubResource("Environment_jd0nb")
 current = true
+fov = 50.0
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1234311975]
 transform = Transform3D(1, 0, 0, 0, -0.69517285, 0.71884257, 0, -0.71884257, -0.69517285, 0, 0, 0)
+shadow_enabled = true
+shadow_opacity = 0.8
 
 [node name="manipilator" type="Node3D" parent="." unique_id=169740469]
