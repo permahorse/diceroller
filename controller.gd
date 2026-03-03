@@ -1,16 +1,20 @@
 extends Node3D
 
-@onready var root = $".."
-@onready var control_root = $"../Control"
+@onready var control_root = $"Control"
 
 @export var d20: PackedScene
+
+
+func _ready() -> void:
+	_add_die(0)
+	
 
 func _add_die(index: int):
 	print('adding die %s' % index)
 	if index == 0:
 		var die: Node3D = d20.instantiate()
-		die.get_node('RigidBody3D').position = Vector3(0, 10, 0)
-		root.add_child(die)
+		die.position = Vector3(0, 10, 0)
+		self.add_child(die)
 		die.connect('picked', _die_picked)
 		die.connect('released', _die_released)
 
