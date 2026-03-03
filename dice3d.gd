@@ -50,7 +50,7 @@ func _physics_process(delta: float) -> void:
 	if not dragging:
 		return
 	var hover_pos: Vector3 = (last_drag_pos - last_drag_orig) * ((last_drag_orig.y - hover_height)/(last_drag_orig.y-last_drag_pos.y)) + last_drag_orig
-	apply_force(2*(hover_pos - position)/delta, transform * drag_local_pos - position)
+	apply_force(4*(hover_pos - position)/delta, transform * drag_local_pos - position)
 	linear_velocity *= pow(0.75, 60*delta);
 	angular_velocity *= pow(0.75, 60*delta);
 	
