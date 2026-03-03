@@ -32,22 +32,6 @@ func _process(delta: float) -> void:
 	light_energy = min(1.0, timer*2) * remap(sin(timer * 3.0), -1, 1, 0.5, 1.5)
 "
 
-[sub_resource type="GDScript" id="GDScript_poiwr"]
-script/source = "extends Node3D
-
-signal picked()
-signal released()
-
-
-
-func _on_rigid_body_3d_picked() -> void:
-	picked.emit()
-
-
-func _on_rigid_body_3d_released() -> void:
-	released.emit()
-"
-
 [node name="RigidBody3D" type="RigidBody3D" unique_id=2127152655]
 collision_layer = 3
 input_capture_on_drag = true
@@ -66,10 +50,5 @@ visible = false
 light_energy = 1.124
 script = SubResource("GDScript_5wfey")
 
-[node name="Node3D" type="Node3D" parent="." unique_id=869552298]
-script = SubResource("GDScript_poiwr")
-
-[connection signal="picked" from="." to="Node3D" method="_on_rigid_body_3d_picked"]
-[connection signal="released" from="." to="Node3D" method="_on_rigid_body_3d_released"]
 [connection signal="rolldone" from="." to="highlight" method="_on_rolldone"]
 [connection signal="rollreset" from="." to="highlight" method="_on_rollreset"]
