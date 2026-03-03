@@ -4,6 +4,34 @@
 [ext_resource type="Script" uid="uid://biivunecpt1fm" path="res://dice3d.gd" id="1_poiwr"]
 [ext_resource type="Texture2D" uid="uid://qtek37852ggj" path="res://geo/d20_temp.png" id="2_5wfey"]
 
+[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_j21bg"]
+friction = 0.25
+bounce = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_poiwr"]
+albedo_texture = ExtResource("2_5wfey")
+
+[sub_resource type="GDScript" id="GDScript_5wfey"]
+script/source = "extends OmniLight3D
+
+var timer: float = 0.0
+
+func _on_rolldone(dice: Dice3D):
+	global_position = dice.position + Vector3(0, 1.2, 0)
+	visible = true
+	timer = 0.0
+	light_energy = 0.0
+	
+func _on_rollreset(dice: Dice3D):
+	visible = false
+	light_energy = 0.0
+
+func _process(delta: float) -> void:
+	timer += delta
+	
+	light_energy = min(1.0, timer*2) * remap(sin(timer * 3.0), -1, 1, 0.5, 1.5)
+"
+
 [sub_resource type="GDScript" id="GDScript_poiwr"]
 script/source = "extends Node3D
 
@@ -20,46 +48,15 @@ func _on_rigid_body_3d_released() -> void:
 	released.emit()
 "
 
-[sub_resource type="PhysicsMaterial" id="PhysicsMaterial_j21bg"]
-friction = 0.25
-bounce = 0.3
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_poiwr"]
-albedo_texture = ExtResource("2_5wfey")
-
-[sub_resource type="GDScript" id="GDScript_5wfey"]
-script/source = "extends OmniLight3D
-
-var timer: float = 0.0
-
-func _on_rolldone(dice: Dice3D):
-	position = dice.position + Vector3(0, 1.2, 0)
-	visible = true
-	timer = 0.0
-	light_energy = 0.0
-	
-func _on_rollreset(dice: Dice3D):
-	visible = false
-	light_energy = 0.0
-
-func _process(delta: float) -> void:
-	timer += delta
-	
-	light_energy = min(1.0, timer*2) * remap(sin(timer * 3.0), -1, 1, 0.5, 1.5)
-"
-
-[node name="Node3D" type="Node3D" unique_id=869552298]
-script = SubResource("GDScript_poiwr")
-
-[node name="RigidBody3D" type="RigidBody3D" parent="." unique_id=2127152655]
+[node name="RigidBody3D" type="RigidBody3D" unique_id=2127152655]
 collision_layer = 3
 input_capture_on_drag = true
 physics_material_override = SubResource("PhysicsMaterial_j21bg")
 script = ExtResource("1_poiwr")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="RigidBody3D" unique_id=149812044]
+[node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=149812044]
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="RigidBody3D" unique_id=783102977]
+[node name="MeshInstance3D" type="MeshInstance3D" parent="." unique_id=783102977]
 mesh = ExtResource("1_j21bg")
 surface_material_override/0 = SubResource("StandardMaterial3D_poiwr")
 
@@ -69,7 +66,10 @@ visible = false
 light_energy = 1.124
 script = SubResource("GDScript_5wfey")
 
-[connection signal="picked" from="RigidBody3D" to="." method="_on_rigid_body_3d_picked"]
-[connection signal="released" from="RigidBody3D" to="." method="_on_rigid_body_3d_released"]
-[connection signal="rolldone" from="RigidBody3D" to="highlight" method="_on_rolldone"]
-[connection signal="rollreset" from="RigidBody3D" to="highlight" method="_on_rollreset"]
+[node name="Node3D" type="Node3D" parent="." unique_id=869552298]
+script = SubResource("GDScript_poiwr")
+
+[connection signal="picked" from="." to="Node3D" method="_on_rigid_body_3d_picked"]
+[connection signal="released" from="." to="Node3D" method="_on_rigid_body_3d_released"]
+[connection signal="rolldone" from="." to="highlight" method="_on_rolldone"]
+[connection signal="rollreset" from="." to="highlight" method="_on_rollreset"]
