@@ -6,13 +6,18 @@ signal released()
 @export var stopthres_lin: float = 0.1
 @export var stopthres_ang: float = 0.1
 @export var time_to_rolldone: float = 1
+@export var hover_height: float = 6
+@export var release_spin_kick_amp: float = 10;
+
 @onready var col: CollisionShape3D = $CollisionShape3D
 @onready var shape: MeshInstance3D = $MeshInstance3D
 @onready var camera: Camera3D = get_viewport().get_camera_3d()
 @onready var stopthres_lin2 = stopthres_lin * stopthres_lin
 @onready var stopthres_ang2 = stopthres_ang * stopthres_ang
+
 var dragging: bool = false
 var last_drag_pos: Vector3 = Vector3.ZERO
+var last_drag_step: Vector3 = Vector3.ZERO
 var drag_local_pos: Vector3 = Vector3.ZERO
 var rolldone_timer: float = 0.0
 var dragging_dice: Array[Dice3D] = []
@@ -44,7 +49,7 @@ func _physics_process(delta: float) -> void:
 	if not dragging:
 		return
 	var hover_pos: Vector3 = last_drag_pos
-	hover_pos.y = 5
+	hover_pos.y = hover_height
 	apply_force(2*(hover_pos - position)/delta, transform * drag_local_pos - position)
 	linear_velocity *= pow(0.75, 60*delta);
 	angular_velocity *= pow(0.75, 60*delta);
@@ -55,6 +60,7 @@ func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, 
 			or not main and not dragging and event is InputEventMouse and event.button_mask & MOUSE_BUTTON_LEFT:
 		dragging = true
 		last_drag_pos = event_position
+		last_drag_step = Vector3.ZERO
 		if main:
 			drag_local_pos = global_transform.inverse() * event_position
 		else:
@@ -89,20 +95,25 @@ func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, 
 		
 	# release
 	if event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT and not event.pressed:
-		dragging = false
-		dragging_dice.clear()
-		dragging_dice_rid.clear()
-		dragging_dice_pos.clear()
-		released.emit()
+		_release()
 
 	if event is InputEventMouseMotion:
+		last_drag_step = event_position - last_drag_pos
 		last_drag_pos = event_position
+
+func _release() -> void:
+	if not dragging:
+		return
+	dragging = false
+	dragging_dice.clear()
+	dragging_dice_rid.clear()
+	dragging_dice_pos.clear()
+	if release_spin_kick_amp > 0:
+		var axis = Vector3.UP.cross(last_drag_step)
+		angular_velocity += axis * release_spin_kick_amp
+	released.emit()
 
 func _notification(what: int) -> void:
 	if what == NOTIFICATION_WM_MOUSE_EXIT and dragging:
-		dragging = false
-		dragging_dice.clear()
-		dragging_dice_rid.clear()
-		dragging_dice_pos.clear()
-		released.emit()
+		_release()
 	
