@@ -3,6 +3,10 @@
 [ext_resource type="PackedScene" uid="uid://br2xjons1vet" path="res://d20.tscn" id="1_jd0nb"]
 [ext_resource type="Material" uid="uid://bu5lkt54yfi66" path="res://tex/wood062/Wood062_1K-PNG.tres" id="2_v5i0k"]
 [ext_resource type="Script" uid="uid://ceyhfqr8ix08x" path="res://controller.gd" id="3_kl0hw"]
+[ext_resource type="PackedScene" uid="uid://d03p8m1lr71ru" path="res://d12.tscn" id="3_vjl2i"]
+[ext_resource type="PackedScene" uid="uid://b8wsvg5yap4cs" path="res://d6.tscn" id="4_67vji"]
+[ext_resource type="PackedScene" uid="uid://dcu416x13vxmn" path="res://d8.tscn" id="4_jry6c"]
+[ext_resource type="PackedScene" uid="uid://daqtiowe5bidm" path="res://d4.tscn" id="6_bhh2s"]
 
 [sub_resource type="PhysicsMaterial" id="PhysicsMaterial_jd0nb"]
 friction = 0.5
@@ -56,6 +60,10 @@ sky = SubResource("Sky_v5i0k")
 [node name="Node3D" type="Node3D" unique_id=1471549783]
 script = ExtResource("3_kl0hw")
 d20 = ExtResource("1_jd0nb")
+d12 = ExtResource("3_vjl2i")
+d8 = ExtResource("4_jry6c")
+d6 = ExtResource("4_67vji")
+d4 = ExtResource("6_bhh2s")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2019588396 node_paths=PackedStringArray("camera")]
 physics_material_override = SubResource("PhysicsMaterial_jd0nb")
@@ -97,21 +105,53 @@ shadow_opacity = 0.8
 
 [node name="Control" type="Control" parent="." unique_id=955441391]
 layout_mode = 3
-anchor_left = 0.4
+anchor_left = 0.5
 anchor_top = 0.869
-anchor_right = 0.6
+anchor_right = 0.5
 anchor_bottom = 1.0
+offset_left = -183.0
+offset_right = 185.0
 grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
 
-[node name="Button_d20" type="Button" parent="Control" unique_id=1443495781]
+[node name="HBoxContainer" type="HBoxContainer" parent="Control" unique_id=832462470]
 layout_mode = 1
 anchors_preset = -1
-anchor_right = 0.344
-anchor_bottom = 1.0
-offset_right = -0.057617188
+anchor_right = 0.93200004
+anchor_bottom = 0.98800004
+offset_right = 0.023986816
+offset_bottom = 0.01865387
+
+[node name="Button_d20" type="Button" parent="Control/HBoxContainer" unique_id=1443495781]
+layout_mode = 2
+size_flags_horizontal = 3
 text = "d20
 "
 
-[connection signal="pressed" from="Control/Button_d20" to="." method="_add_die" binds= [0]]
+[node name="Button_d12" type="Button" parent="Control/HBoxContainer" unique_id=327530457]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "d12"
+
+[node name="Button_d8" type="Button" parent="Control/HBoxContainer" unique_id=840881555]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "d8
+"
+
+[node name="Button_d6" type="Button" parent="Control/HBoxContainer" unique_id=46772327]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "d6"
+
+[node name="Button_d4" type="Button" parent="Control/HBoxContainer" unique_id=1178442516]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "d4"
+
+[connection signal="pressed" from="Control/HBoxContainer/Button_d20" to="." method="_add_die" binds= [0]]
+[connection signal="pressed" from="Control/HBoxContainer/Button_d12" to="." method="_add_die" binds= [1]]
+[connection signal="pressed" from="Control/HBoxContainer/Button_d8" to="." method="_add_die" binds= [2]]
+[connection signal="pressed" from="Control/HBoxContainer/Button_d6" to="." method="_add_die" binds= [3]]
+[connection signal="pressed" from="Control/HBoxContainer/Button_d4" to="." method="_add_die" binds= [4]]
