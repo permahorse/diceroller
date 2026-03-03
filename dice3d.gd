@@ -17,6 +17,7 @@ signal released()
 
 var dragging: bool = false
 var last_drag_pos: Vector3 = Vector3.ZERO
+var last_drag_orig: Vector3 = Vector3.ZERO
 var last_drag_step: Vector3 = Vector3.ZERO
 var drag_local_pos: Vector3 = Vector3.ZERO
 var rolldone_timer: float = 0.0
@@ -48,8 +49,7 @@ func _process(delta: float) -> void:
 func _physics_process(delta: float) -> void:
 	if not dragging:
 		return
-	var hover_pos: Vector3 = last_drag_pos
-	hover_pos.y = hover_height
+	var hover_pos: Vector3 = (last_drag_pos - last_drag_orig) * ((last_drag_orig.y - hover_height)/(last_drag_orig.y-last_drag_pos.y)) + last_drag_orig
 	apply_force(2*(hover_pos - position)/delta, transform * drag_local_pos - position)
 	linear_velocity *= pow(0.75, 60*delta);
 	angular_velocity *= pow(0.75, 60*delta);
@@ -60,6 +60,7 @@ func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, 
 			or not main and not dragging and event is InputEventMouse and event.button_mask & MOUSE_BUTTON_LEFT:
 		dragging = true
 		last_drag_pos = event_position
+		last_drag_orig = camera.position
 		last_drag_step = Vector3.ZERO
 		if main:
 			drag_local_pos = global_transform.inverse() * event_position
@@ -100,6 +101,7 @@ func _input_event(camera: Camera3D, event: InputEvent, event_position: Vector3, 
 	if event is InputEventMouseMotion:
 		last_drag_step = event_position - last_drag_pos
 		last_drag_pos = event_position
+		last_drag_orig = camera.position
 
 func _release() -> void:
 	if not dragging:
