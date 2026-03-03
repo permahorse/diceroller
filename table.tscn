@@ -101,21 +101,20 @@ d20 = ExtResource("1_jd0nb")
 
 [node name="Control" type="Control" parent="." unique_id=955441391]
 layout_mode = 3
-anchors_preset = 5
-anchor_left = 0.5
-anchor_right = 0.5
-offset_left = -576.0
-offset_right = -536.0
-offset_bottom = 40.0
+anchor_left = 0.4
+anchor_top = 0.869
+anchor_right = 0.6
+anchor_bottom = 1.0
 grow_horizontal = 2
+grow_vertical = 0
+size_flags_vertical = 8
 
 [node name="Button" type="Button" parent="Control" unique_id=1443495781]
 layout_mode = 1
 anchors_preset = -1
-offset_left = 459.0
-offset_top = 563.0
-offset_right = 510.0
-offset_bottom = 612.0
+anchor_right = 0.344
+anchor_bottom = 1.0
+offset_right = -0.057617188
 text = "d20
 "
 
