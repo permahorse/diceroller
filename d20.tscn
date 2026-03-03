@@ -36,6 +36,7 @@ func _process(delta: float) -> void:
 collision_layer = 3
 input_capture_on_drag = true
 physics_material_override = SubResource("PhysicsMaterial_j21bg")
+linear_damp = 0.01
 script = ExtResource("1_poiwr")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="." unique_id=149812044]
