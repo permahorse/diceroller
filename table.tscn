@@ -54,8 +54,8 @@ background_mode = 2
 sky = SubResource("Sky_v5i0k")
 
 [node name="Node3D" type="Node3D" unique_id=1471549783]
-
-[node name="dice" parent="." unique_id=869552298 instance=ExtResource("1_jd0nb")]
+script = ExtResource("3_kl0hw")
+d20 = ExtResource("1_jd0nb")
 
 [node name="StaticBody3D" type="StaticBody3D" parent="." unique_id=2019588396 node_paths=PackedStringArray("camera")]
 physics_material_override = SubResource("PhysicsMaterial_jd0nb")
@@ -95,10 +95,6 @@ transform = Transform3D(1, 0, 0, 0, -0.69517285, 0.71884257, 0, -0.71884257, -0.
 shadow_enabled = true
 shadow_opacity = 0.8
 
-[node name="controller" type="Node3D" parent="." unique_id=169740469]
-script = ExtResource("3_kl0hw")
-d20 = ExtResource("1_jd0nb")
-
 [node name="Control" type="Control" parent="." unique_id=955441391]
 layout_mode = 3
 anchor_left = 0.4
@@ -109,7 +105,7 @@ grow_horizontal = 2
 grow_vertical = 0
 size_flags_vertical = 8
 
-[node name="Button" type="Button" parent="Control" unique_id=1443495781]
+[node name="Button_d20" type="Button" parent="Control" unique_id=1443495781]
 layout_mode = 1
 anchors_preset = -1
 anchor_right = 0.344
@@ -118,6 +114,4 @@ offset_right = -0.057617188
 text = "d20
 "
 
-[connection signal="picked" from="dice" to="controller" method="_die_picked"]
-[connection signal="released" from="dice" to="controller" method="_die_released"]
-[connection signal="pressed" from="Control/Button" to="controller" method="_add_die" binds= [0]]
+[connection signal="pressed" from="Control/Button_d20" to="." method="_add_die" binds= [0]]
