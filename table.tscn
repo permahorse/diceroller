@@ -151,8 +151,14 @@ layout_mode = 2
 size_flags_horizontal = 3
 text = "d4"
 
+[node name="Button_reset" type="Button" parent="Control/HBoxContainer" unique_id=2040713717]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "clear"
+
 [connection signal="pressed" from="Control/HBoxContainer/Button_d20" to="." method="_add_die" binds= [0]]
 [connection signal="pressed" from="Control/HBoxContainer/Button_d12" to="." method="_add_die" binds= [1]]
 [connection signal="pressed" from="Control/HBoxContainer/Button_d8" to="." method="_add_die" binds= [2]]
 [connection signal="pressed" from="Control/HBoxContainer/Button_d6" to="." method="_add_die" binds= [3]]
 [connection signal="pressed" from="Control/HBoxContainer/Button_d4" to="." method="_add_die" binds= [4]]
+[connection signal="pressed" from="Control/HBoxContainer/Button_reset" to="." method="clear"]
