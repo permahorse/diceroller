@@ -111,7 +111,7 @@ func _release() -> void:
 	dragging_dice_rid.clear()
 	dragging_dice_pos.clear()
 	if release_spin_kick_amp > 0:
-		var axis = Vector3.UP.cross(last_drag_step)
+		var axis = Vector3.UP.cross(last_drag_step * Vector3(1, 0, 1))
 		angular_velocity += axis * release_spin_kick_amp
 	released.emit()
 
