@@ -9,6 +9,9 @@ extends Node3D
 @export var d4: PackedScene
 
 
+var dice: Array[Node3D] = []
+
+
 func _ready() -> void:
 	_add_die(0)
 	
@@ -30,8 +33,14 @@ func _add_die(index: int):
 		return
 	die.position = Vector3(0, 10, 0)
 	self.add_child(die)
+	dice.append(die)
 	die.connect('picked', _die_picked)
 	die.connect('released', _die_released)
+
+func clear():
+	for die in dice:
+		die.queue_free()
+	dice.clear()
 
 
 func _die_picked():
